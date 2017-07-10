@@ -12,6 +12,6 @@ On the right part of you screen you see fields to edit your personal email, name
 Seems that all you need is to setup and run the latest `testrpc` ethereum network emulator https://github.com/ethereumjs/testrpc
 
 ### Building and the frontend
-
-1. First run `truffle compile`, then run `truffle migrate` to deploy the contracts onto your network of choice (default "development").
-1. Then run `npm run dev` to build the app and serve it on http://localhost:8080
+1. Install [truffle](https://github.com/trufflesuite/truffle)
+2. Then run `truffle compile`, then run `truffle migrate` to deploy the contracts onto your network of choice (default "development").
+3. Then run `npm run dev` to build the app and serve it on http://localhost:8080
