@@ -1,0 +1,10 @@
+@import '~bootstrap/scss/bootstrap';
+@import '~normalize.css';
+@import 'helpers/fonts';
+@import 'helpers/variables';
+
+// Global styles must be written here
+html {
+  color: $color-main;
+  font-family: 'Open Sans', sans-serif;
+}

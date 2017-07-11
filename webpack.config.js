@@ -1,36 +1,48 @@
 const path = require('path');
+const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  entry: './app/javascripts/app.js',
-  output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'app.js'
+  devtool: 'cheap-module-eval-source-map',
+
+  entry: {
+    bundle: [
+      path.join(__dirname, 'app/js/index.jsx'),
+    ],
   },
-  plugins: [
-    // Copy our app's index.html to the build folder.
-    new CopyWebpackPlugin([
-      { from: './app/index.html', to: "index.html" }
-    ])
-  ],
+
+  output: {
+    path: path.join(__dirname, 'build'),
+    publicPath: '/',
+    filename: '[name].js',
+  },
+
   module: {
     rules: [
       {
-       test: /\.css$/,
-       use: [ 'style-loader', 'css-loader' ]
-      }
-    ],
-    loaders: [
-      { test: /\.json$/, use: 'json-loader' },
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: ['react-hot-loader', 'babel-loader'],
+      },
       {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015'],
-          plugins: ['transform-runtime']
-        }
-      }
-    ]
-  }
-}
+        test: /\.scss?$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /\.json$/,
+        use: 'json-loader',
+      },
+    ],
+  },
+
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new CopyWebpackPlugin([
+      { from: './app/index.html', to: 'index.html' },
+    ]),
+  ],
+};
