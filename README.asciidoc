@@ -7,14 +7,23 @@ On the left part of your screen you can see all users who updated their personal
 On the right part of you screen you see fields to edit your personal email, name and age. By clicking `Update` button the data will be stored on the blockchain.
 
 ## Development
-### How to setup dev environment
+### How to setup ethereum node for development
 
 Seems that all you need is to setup and run the latest `testrpc` ethereum network emulator https://github.com/ethereumjs/testrpc
 
-### Building and the frontend
+### Setup node.js dev environment
 1. Install [truffle](https://github.com/trufflesuite/truffle)
 2. Then run `truffle compile`, then run `truffle migrate` to deploy the contracts onto your network of choice (default "development").
 3. Then run `npm run dev` to build the app and serve it on http://localhost:8080
+
+## Production
+### Building static app
+
+[source,shell]
+.Using pre-configured npm build script
+----
+npm run build
+----
 
 ### Docker deployment
 WARNING: Make sure that you have pre-built static app in `build` folder. If you don't, check out the section above.
