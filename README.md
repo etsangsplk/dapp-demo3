@@ -15,3 +15,16 @@ Seems that all you need is to setup and run the latest `testrpc` ethereum networ
 1. Install [truffle](https://github.com/trufflesuite/truffle)
 2. Then run `truffle compile`, then run `truffle migrate` to deploy the contracts onto your network of choice (default "development").
 3. Then run `npm run dev` to build the app and serve it on http://localhost:8080
+
+### Docker deployment
+
+#### Build container image from existing build
+Build a new version of docker image with
+```sh
+docker build -t stoutsource/dapp-demo3 .
+```
+
+And run it
+```sh
+docker run -p 8080:80 stoutsource/dapp-demo3
+```
