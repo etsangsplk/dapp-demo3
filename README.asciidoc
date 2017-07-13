@@ -17,14 +17,18 @@ Seems that all you need is to setup and run the latest `testrpc` ethereum networ
 3. Then run `npm run dev` to build the app and serve it on http://localhost:8080
 
 ### Docker deployment
+WARNING: Make sure that you have pre-built static app in `build` folder. If you don't, check out the section above.
 
 #### Build container image from existing build
-Build a new version of docker image with
-```sh
-docker build -t stoutsource/dapp-demo3 .
-```
 
-And run it
-```sh
+[source,shell]
+.Build a new version of docker image with
+----
+docker build -t stoutsource/dapp-demo3 .
+----
+
+[source,shell]
+.And run it
+----
 docker run -p 8080:80 stoutsource/dapp-demo3
-```
+----
