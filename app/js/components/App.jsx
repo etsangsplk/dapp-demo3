@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import contract from 'truffle-contract';
 import Header from './Header';
 import SendForm from './SendForm';
-import ProfileBuilderContract from '../../../build/contracts/ProfileBuilder.json';
+import ProfileContract from '../../../build/contracts/Profile.json';
 
 class App extends Component {
   state = {
@@ -13,7 +13,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    const Profile = contract(ProfileBuilderContract);
+    const Profile = contract(ProfileContract);
 
     const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
