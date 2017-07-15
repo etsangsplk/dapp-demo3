@@ -1,5 +1,5 @@
-let ProfileBuilder = artifacts.require("./ProfileBuilder.sol");
+let Profile = artifacts.require("./Profile.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(ProfileBuilder);
+  deployer.deploy(Profile);
 };
