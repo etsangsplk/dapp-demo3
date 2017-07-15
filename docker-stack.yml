@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  nginx:
+    image: linuxserver/letsencrypt
+    privileged: true
+    ports:
+      - 443:443
+    environment:
+      - URL=https://dapp-demo3.stoutsource.com
+      - EMAIL=nikita@chebyk.in
+      - TZ=Europe/Kaliningrad
+    volumes:
+      - le_config:/config
+
+  dapp:
+    build: .
+    ports:
+      - 8888
+
+volumes:
+  le_config:

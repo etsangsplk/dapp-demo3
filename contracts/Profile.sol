@@ -1,6 +1,6 @@
 pragma solidity ^0.4.11;
 
-contract ProfileBuilder {
+contract Profile {
   struct User {
     bytes32 email;
     bytes32 name;
