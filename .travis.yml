@@ -16,3 +16,12 @@ install:
 script:
   - testrpc &
   - truffle test
+  - npm run build
+
+deploy:
+  provider: pages
+  skip_clenup: true
+  local_dier: build
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
