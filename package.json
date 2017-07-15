@@ -2,12 +2,16 @@
   "name": "truffle-init-webpack",
   "version": "0.0.1",
   "description": "Frontend example using truffle v3",
+  "homepage": "https://stoutsource.github.io/dapp-demo3",
   "scripts": {
     "lint": "eslint ./",
     "dev": "webpack-dev-server --config webpack.config.dev.js",
     "build": "webpack --config webpack.config.prod.js"
   },
-  "authors": ["Nikita Chebykin", "Nikita Borisowsky"],
+  "authors": [
+    "Nikita Chebykin",
+    "Nikita Borisowsky"
+  ],
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.22.2",
