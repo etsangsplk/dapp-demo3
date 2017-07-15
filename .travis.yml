@@ -16,6 +16,7 @@ install:
 script:
   - testrpc &
   - truffle test
+  - truffle compile
   - npm run build
 
 deploy:
