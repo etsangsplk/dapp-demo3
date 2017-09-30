@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Web3 from 'web3';
 import contract from 'truffle-contract';
 import _ from 'lodash';
 import UsersList from './UsersList';
 import UserEditForm from './UserEditForm';
+import getWeb3 from '../utils/getWeb3';
 import ProfileContract from '../../../build/contracts/Profile.json';
 
 class App extends Component {
@@ -33,16 +33,15 @@ class App extends Component {
   componentWillMount() {
     const Profile = contract(ProfileContract);
 
-    const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+    getWeb3
+      .then((results) => {
+        this.setState({
+          web3: results.web3,
+          profile: Profile,
+        });
 
-    this.setState({
-      profile: Profile,
-      web3,
-    });
-  }
-
-  componentDidMount() {
-    this.start();
+        this.initContract();
+      });
   }
 
   onFormSubmit = (data) => {
@@ -58,7 +57,7 @@ class App extends Component {
     }
   }
 
-  start = () => {
+  initContract = () => {
     const { profile, web3 } = this.state;
 
     profile.setProvider(web3.currentProvider);
