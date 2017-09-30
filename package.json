@@ -1,7 +1,7 @@
 {
-  "name": "truffle-init-webpack",
+  "name": "dapp-demo3",
   "version": "0.0.1",
-  "description": "Frontend example using truffle v3",
+  "description": "DApp Demo3 - Example of edit &share personal data app",
   "homepage": "https://stoutsource.github.io/dapp-demo3",
   "scripts": {
     "lint": "eslint ./",
