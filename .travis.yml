@@ -16,13 +16,13 @@ install:
 script:
   - testrpc &
   - truffle test
-  # - truffle compile
-  # - npm run build
+  - truffle compile
+  - npm run build
 
-# deploy:
-#   provider: pages
-#   skip_cleanup: true
-#   local_dir: build
-#   github_token: $GITHUB_TOKEN
-#   on:
-#     branch: master
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: build
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
