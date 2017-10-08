@@ -1,11 +1,13 @@
-const Profile = artifacts.require("../contracts/Profile.sol");
+const Profile = artifacts.require('../contracts/Profile.sol');
 
-contract('Profile', function(accounts) {
-  it("should put 10000 blahblah", function() {
-    return Profile.deployed().then(function(instance) {
-      // return instance.getBalance.call(accounts[0]);
-    }).then(function(balance) {
-      // assert.equal(balance.valueOf(), 10000, "10000 wasn't in the first account");
+contract('Profile', function (accounts) {
+  describe('collection without any profiles added', function () {
+    it('should be empty', function () {
+      return Profile.deployed().then(function (instance) {
+        return instance.getUserCount.call();
+      }).then(function (count) {
+        assert.equal(count.valueOf(), 0, 'should be empty');
+      });
     });
   });
 });
