@@ -40,7 +40,6 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new CopyWebpackPlugin([
       { from: './app/index.html', to: 'index.html' },
     ]),
