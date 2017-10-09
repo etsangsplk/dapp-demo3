@@ -1,6 +1,8 @@
 # dapp-demo3
 Example dapp for storing your personal data like email, name and age.
 
+image:https://travis-ci.org/stoutsource/dapp-demo3.svg?branch=master["Build Status", link="https://travis-ci.org/stoutsource/dapp-demo3"]
+
 ## Features
 On the left part of your screen you can see all users who updated their personal information (email, name and age). If you already updated your own information, your id should be highlighted with a distinct color.
 
