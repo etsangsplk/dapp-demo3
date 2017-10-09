@@ -11,22 +11,9 @@ class App extends Component {
     account: '',
     profile: '',
     web3: '',
-    // users: [ // TODO: List of users who changed data
-    //   {
-    //     address: 'currentUserAddress', // TODO: this is just an example
-    //     firstName: 'Alexander',
-    //     secondName: 'Pistoletov',
-    //     age: '42',
-    //   },
-    //   {
-    //     address: 'sdfsdd', // TODO: this is just an example
-    //     firstName: 'Diana',
-    //     secondName: 'Shurygina',
-    //     age: '18',
-    //   },
-    // ],
     users: [],
-    currentUserAddress: 'currentUserAddress',
+    accountAddress: '',
+    contractAddress: '',
     // TODO: Current user who changing information (is it same as state.profile?)
   }
 
@@ -38,6 +25,7 @@ class App extends Component {
         this.setState({
           web3: results.web3,
           profile: Profile,
+          accountAddress: web3.eth.defaultAccount,
         });
 
         this.initContract();
@@ -61,6 +49,13 @@ class App extends Component {
     const { profile, web3 } = this.state;
 
     profile.setProvider(web3.currentProvider);
+
+    profile.detectNetwork()
+      .then(() => {
+        this.setState({
+          contractAddress: profile.address,
+        });
+      });
 
     // Get the initial account balance so it can be displayed.
     web3.eth.getAccounts((err, accs) => {
@@ -95,11 +90,28 @@ class App extends Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-md">
+          <div className="col-md-8">
             <h1>Community register (Dapp-Demo3)</h1>
+          </div>
+          <div className="col-md-4">
+            <table className="table table-striped table-sm">
+              <tbody>
+                <tr>
+                  <td>Contract</td>
+                  <td>{this.state.contractAddress}</td>
+                </tr>
+                <tr>
+                  <td>Account</td>
+                  <td>{this.state.accountAddress}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
+        <div className="row">
+          <hr />
+        </div>
         <div className="row">
           <div className="col-md-6">
             <UsersList
