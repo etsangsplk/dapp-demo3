@@ -41,37 +41,35 @@ class UserEditForm extends Component {
     return (
       <CardContainer>
         <form ref={(node) => { this.form = node; }} onSubmit={this.onFormSubmit}>
+          <h5>Enter your credentials to store in our registry</h5>
           <div className="form-group">
-            <label htmlFor="first_name">Enter your first name</label>
             <input
               type="text"
               className="form-control"
               id="first_name"
-              placeholder="Alexander"
+              placeholder="Your Email"
               onChange={this.onFirstNameChange}
               required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="second_name">Enter your second name</label>
             <input
               type="text"
               className="form-control"
               id="second_name"
-              placeholder="Pistoletov"
+              placeholder="Your Name"
               onChange={this.onSecondNameChange}
               required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="age">Enter your age</label>
             <input
               type="number"
               className="form-control"
               id="age"
-              placeholder="42"
+              placeholder="Your age"
               min="0"
               max="100"
               onChange={this.onAgeChange}
