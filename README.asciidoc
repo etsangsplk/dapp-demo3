@@ -16,6 +16,12 @@ Seems that all you need is to setup and run the latest `testrpc` ethereum networ
 2. Then run `truffle compile`, then run `truffle migrate` to deploy the contracts onto your network of choice (default "development").
 3. Then run `npm run dev` to build the app and serve it on http://localhost:8080
 
+### web3.js notice
+
+Currently unable upgrade to web3.js v1.x.x due the following reasons:
+* `ganacha-core` (testrpc) doesn't support WS connection yet while v1.x.x requires it https://github.com/trufflesuite/ganache-core/pull/14
+* `truffle` doesn't support web-packed v1.x.x requiring a lot of broken dependencies
+
 ## Production
 ### Building static app
 
