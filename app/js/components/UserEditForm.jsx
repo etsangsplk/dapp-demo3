@@ -25,16 +25,16 @@ class UserEditForm extends Component {
 
   onFormSubmit = (e) => {
     e.preventDefault();
-    this.form.reset();
+    // this.form.reset();
+    //
+    // const data = {
+    //   address: this.props.currentUserAddress,
+    //   firstName: this.state.firstName,
+    //   secondName: this.state.secondName,
+    //   age: this.state.age,
+    // };
 
-    const data = {
-      address: this.props.currentUserAddress,
-      firstName: this.state.firstName,
-      secondName: this.state.secondName,
-      age: this.state.age,
-    };
-
-    this.props.onFormSubmit(data);
+    this.props.onFormSubmit({});
   }
 
   render() {
@@ -49,7 +49,6 @@ class UserEditForm extends Component {
               id="first_name"
               placeholder="Your Email"
               onChange={this.onFirstNameChange}
-              required
             />
           </div>
 
@@ -60,7 +59,6 @@ class UserEditForm extends Component {
               id="second_name"
               placeholder="Your Name"
               onChange={this.onSecondNameChange}
-              required
             />
           </div>
 
@@ -73,7 +71,6 @@ class UserEditForm extends Component {
               min="0"
               max="100"
               onChange={this.onAgeChange}
-              required
             />
           </div>
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import contract from 'truffle-contract';
-import _ from 'lodash';
+import async from 'async';
 import UsersList from './UsersList';
 import UserEditForm from './UserEditForm';
 import getWeb3 from '../utils/getWeb3';
@@ -12,6 +12,7 @@ class App extends Component {
     profile: '',
     web3: '',
     users: [],
+    userCount: 0,
     accountAddress: '',
     contractAddress: '',
     // TODO: Current user who changing information (is it same as state.profile?)
@@ -33,9 +34,12 @@ class App extends Component {
   }
 
   onFormSubmit = (data) => {
-    const { users, currentUserAddress } = this.state;
-    const updatedUsers = users;
-    const updatedUser = _.findIndex(updatedUsers, user => user.address === currentUserAddress);
+    const { profile, web3 } = this.state;
+
+
+    // const { users, currentUserAddress } = this.state;
+    // const updatedUsers = users;
+    // const updatedUser = _.findIndex(updatedUsers, user => user.address === currentUserAddress);
 
     if (updatedUser > -1) {
       updatedUsers[updatedUser] = data;
@@ -49,13 +53,13 @@ class App extends Component {
     const { profile, web3 } = this.state;
 
     profile.setProvider(web3.currentProvider);
+    profile.defaults({ from: web3.eth.coinbase });
 
-    profile.detectNetwork()
-      .then(() => {
-        this.setState({
-          contractAddress: profile.address,
-        });
-      });
+
+    // profile.detectNetwork()
+    //   .then(() => {
+    //
+    //   });
 
     // Get the initial account balance so it can be displayed.
     web3.eth.getAccounts((err, accs) => {
@@ -74,11 +78,117 @@ class App extends Component {
     });
   }
 
+  updateUserCount = () => {
+    const { profile } = this.state;
+
+    profile.deployed()
+      .then((instance) => {
+        instance.getUserCount()
+          .then((count) => {
+            this.setState({
+              userCount: count,
+            });
+          });
+      });
+  }
+
+  setUserCredentials = () => {
+    const { profile } = this.state;
+
+    profile.deployed()
+      .then((instance) => {
+        instance.setUser('nikita@chebyk.in', 'Nikita', 29)
+          .then((smth) => {
+            console.log(smth);
+            // instance.getUser
+            this.updateUserCount();
+          });
+      });
+  }
+
+  // Read-expensive operation
+  loadUsersList = () => {
+    const { profile } = this.state;
+    let instance;
+
+    profile.deployed()
+      .then((ins) => {
+        instance = ins;
+        return instance.getUserCount();
+      })
+      .then((count) => {
+        console.log('loading', count, 'times');
+        return new Promise((resolve, reject) => {
+          async.times(count.toNumber(), (n, next) => {
+            instance.getUserAtIndex(n)
+              .then((address) => {
+                next(null, address);
+              });
+          }, (err, addresses) => {
+            if (err) {
+              return reject(err);
+            }
+
+            return resolve(addresses);
+          });
+        });
+      })
+      .then((addresses) => {
+        console.log('addresses', addresses);
+        async.map(addresses, (address, next) => {
+          this.getUserCredentials(address)
+            .then((user) => {
+              next(null, user);
+            })
+            .catch(err => next(err));
+        }, (err, mappedUsers) => {
+          if (err) {
+            console.error(err);
+          }
+
+          console.log('users', mappedUsers);
+          this.setState({
+            users: mappedUsers,
+          });
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  getUserCredentials = (address) => {
+    const { profile, web3 } = this.state;
+
+    return new Promise((resolve, reject) => {
+      profile.deployed()
+        .then((instance) => {
+          instance.getUser(address)
+            .then((smth) => {
+              resolve({
+                email: web3.toUtf8(smth[0]),
+                name: web3.toUtf8(smth[1]),
+                age: smth[2],
+                address,
+              });
+
+              console.log(smth);
+            });
+        });
+    });
+  }
+
   bootstrap = () => {
     const { profile } = this.state;
 
     profile.deployed()
       .then((instance) => {
+        this.setState({
+          contractAddress: instance.address,
+        });
+
+        this.updateUserCount();
+        this.loadUsersList();
         console.log(instance);
       })
       .catch((error) => {
@@ -111,12 +221,15 @@ class App extends Component {
 
         <div className="row">
           <hr />
+          <button onClick={this.setUserCredentials}>Set Credentials</button>
+          <button onClick={this.getUserCredentials}>Get Credentials</button>
         </div>
         <div className="row">
           <div className="col-md-6">
             <UsersList
               currentUserAddress={this.state.currentUserAddress}
               users={this.state.users}
+              userCount={this.state.userCount}
             />
           </div>
           <div className="col-md-6">

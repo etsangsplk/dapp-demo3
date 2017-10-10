@@ -7,16 +7,17 @@ class UsersList extends Component {
       return users.map(user =>
         <li
           key={user.address}
-          className={(user.address === this.props.currentUserAddress) ?
+          className={(user.address === this.props.accountAddress) ?
             'list-group-item list-group-item-warning' :
             'list-group-item'
           }
-          title={(user.address === this.props.currentUserAddress) ?
+          title={(user.address === this.props.accountAddress) ?
             'This is you!' :
             ''
           }
         >
-          {`${user.firstName} ${user.secondName} - ${user.age} y. o.`}
+          {`${user.email} ${user.name} - ${user.age} y. o.`} <br />
+          <small className="">{user.address}</small>
         </li>,
       );
     } else {
@@ -29,8 +30,10 @@ class UsersList extends Component {
   }
 
   render() {
+    console.log(this.props.userCount);
     return (
       <CardContainer>
+        <h4>Total: {this.props.userCount.toString()}</h4>
         <ul className="list-group">
           {this.logUsersChanges(this.props.users)}
         </ul>
