@@ -201,7 +201,7 @@ class App extends Component {
       <div className="container">
         <div className="row">
           <div className="col-md-8">
-            <h1>Community register (Dapp-Demo3)</h1>
+            <h1>Community registry (Dapp-Demo3)</h1>
           </div>
           <div className="col-md-4">
             <table className="table table-striped table-sm">

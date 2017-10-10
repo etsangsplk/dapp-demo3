@@ -23,7 +23,7 @@ class UsersList extends Component {
     } else {
       return (
         <li className="list-group-item list-group-item-danger">
-          Nobody has changed their cridentials yet
+          Nobody has changed their credentials yet
         </li>
       );
     }
