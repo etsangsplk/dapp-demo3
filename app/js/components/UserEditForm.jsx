@@ -3,19 +3,31 @@ import CardContainer from './CardContainer';
 
 class UserEditForm extends Component {
   state = {
-    firstName: '',
-    secondName: '',
+    email: '',
+    name: '',
     age: '',
   }
 
-  onFirstNameChange = (e) => {
-    const { value } = e.target;
-    this.setState({ firstName: value });
+  componentWillReceiveProps(props) {
+    if (props.currentUserData.email !== this.props.currentUserData.email ||
+      props.currentUserData.name !== this.props.currentUserData.name ||
+      props.currentUserData.age !== this.props.currentUserData.age) {
+      this.setState({
+        name: props.currentUserData.name,
+        email: props.currentUserData.email,
+        age: props.currentUserData.age,
+      });
+    }
   }
 
-  onSecondNameChange = (e) => {
+  onEmailChange = (e) => {
     const { value } = e.target;
-    this.setState({ secondName: value });
+    this.setState({ email: value });
+  }
+
+  onNameChange = (e) => {
+    const { value } = e.target;
+    this.setState({ name: value });
   }
 
   onAgeChange = (e) => {
@@ -25,17 +37,15 @@ class UserEditForm extends Component {
 
   onFormSubmit = (e) => {
     e.preventDefault();
-    // this.form.reset();
-    //
-    // const data = {
-    //   address: this.props.currentUserAddress,
-    //   firstName: this.state.firstName,
-    //   secondName: this.state.secondName,
-    //   age: this.state.age,
-    // };
+    this.form.reset();
 
-    this.props.onFormSubmit({});
+    this.props.onFormSubmit({
+      email: this.state.email,
+      name: this.state.name,
+      age: this.state.age,
+    });
   }
+
 
   render() {
     return (
@@ -48,7 +58,8 @@ class UserEditForm extends Component {
               className="form-control"
               id="first_name"
               placeholder="Your Email"
-              onChange={this.onFirstNameChange}
+              value={this.state.email}
+              onChange={this.onEmailChange}
             />
           </div>
 
@@ -58,7 +69,8 @@ class UserEditForm extends Component {
               className="form-control"
               id="second_name"
               placeholder="Your Name"
-              onChange={this.onSecondNameChange}
+              value={this.state.name}
+              onChange={this.onNameChange}
             />
           </div>
 
@@ -70,6 +82,7 @@ class UserEditForm extends Component {
               placeholder="Your age"
               min="0"
               max="100"
+              value={this.state.age}
               onChange={this.onAgeChange}
             />
           </div>

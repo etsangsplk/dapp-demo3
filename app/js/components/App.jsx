@@ -15,6 +15,8 @@ class App extends Component {
     userCount: 0,
     accountAddress: '',
     contractAddress: '',
+    currentAccountStored: false,
+    currentAccountData: {},
     // TODO: Current user who changing information (is it same as state.profile?)
   }
 
@@ -34,19 +36,14 @@ class App extends Component {
   }
 
   onFormSubmit = (data) => {
-    const { profile, web3 } = this.state;
-
-
-    // const { users, currentUserAddress } = this.state;
-    // const updatedUsers = users;
-    // const updatedUser = _.findIndex(updatedUsers, user => user.address === currentUserAddress);
-
-    if (updatedUser > -1) {
-      updatedUsers[updatedUser] = data;
-      this.setState({ users: updatedUsers });
-    } else {
-      this.setState({ users: [...this.state.users, data] });
-    }
+    this.setUserCredentials(data.email, data.name, data.age)
+      .then(() => {
+        console.log('new list updated');
+        this.updateUserCount();
+        this.loadUsersList();
+      });
+    // TODO: update user in blockchain
+    // TODO: on transaction success update state
   }
 
   initContract = () => {
@@ -89,21 +86,17 @@ class App extends Component {
               userCount: count,
             });
           });
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }
 
-  setUserCredentials = () => {
+  setUserCredentials = (email, name, age) => {
     const { profile } = this.state;
 
-    profile.deployed()
-      .then((instance) => {
-        instance.setUser('nikita@chebyk.in', 'Nikita', 29)
-          .then((smth) => {
-            console.log(smth);
-            // instance.getUser
-            this.updateUserCount();
-          });
-      });
+    return profile.deployed()
+      .then(instance => instance.setUser(email, name, age));
   }
 
   // Read-expensive operation
@@ -178,6 +171,46 @@ class App extends Component {
     });
   }
 
+  loadMyCredentials = () => {
+    const { profile, web3 } = this.state;
+
+    profile.deployed()
+      .then(instance => instance.isUser(this.state.accountAddress))
+      .then((isUser) => {
+        console.log(isUser);
+        if (isUser) {
+          this.getUserCredentials(this.state.accountAddress)
+            .then((user) => {
+              this.setState({
+                currentAccountStored: true,
+                currentAccountData: user,
+              });
+              console.log('current user is', user);
+            });
+        } else {
+          console.log('no such user');
+          this.setState({
+            currentAccountStored: false,
+          });
+        }
+      });
+  }
+
+  deleteMyCredentials = () => {
+    const { profile } = this.state;
+
+    profile.deployed()
+      .then((instance) => {
+        instance.deleteMe()
+          .then((smth) => {
+            console.log(smth);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   bootstrap = () => {
     const { profile } = this.state;
 
@@ -189,6 +222,7 @@ class App extends Component {
 
         this.updateUserCount();
         this.loadUsersList();
+        this.loadMyCredentials();
         console.log(instance);
       })
       .catch((error) => {
@@ -221,8 +255,12 @@ class App extends Component {
 
         <div className="row">
           <hr />
-          <button onClick={this.setUserCredentials}>Set Credentials</button>
-          <button onClick={this.getUserCredentials}>Get Credentials</button>
+          <div className="btn-group" role="group">
+            <button className="btn btn-secondary" onClick={this.deleteMyCredentials}>Delete Me</button>
+            <button className="btn btn-secondary" onClick={this.updateUserCount}>Get Count</button>
+            <button className="btn btn-secondary" onClick={this.setUserCredentials}>Set Credentials</button>
+            <button className="btn btn-secondary" onClick={this.getUserCredentials}>Get Credentials</button>
+          </div>
         </div>
         <div className="row">
           <div className="col-md-6">
@@ -234,7 +272,7 @@ class App extends Component {
           </div>
           <div className="col-md-6">
             <UserEditForm
-              currentUserAddress={this.state.currentUserAddress}
+              currentUserData={this.state.currentAccountData}
               onFormSubmit={this.onFormSubmit}
             />
           </div>

@@ -38,6 +38,7 @@ contract Profile {
         userIndex.push(msg.sender);
     }
 
+    LogNewUser(msg.sender, users[msg.sender].index, email, age);
     return true;
   }
 
@@ -61,5 +62,20 @@ contract Profile {
 
   function getUserAtIndex(uint index) public constant returns(address userAddress) {
       return userIndex[index];
+  }
+
+  function deleteMe() public {
+
+    assert(isUser(msg.sender));
+
+    uint index = users[msg.sender].index;
+    delete userIndex[index];
+    delete users[msg.sender];
+
+    address lastAddress = userIndex[userIndex.length - 1];
+    users[lastAddress].index = index;
+    userIndex[index] = lastAddress;
+
+    userIndex.length--;
   }
 }
