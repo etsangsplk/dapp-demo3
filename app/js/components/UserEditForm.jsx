@@ -3,19 +3,31 @@ import CardContainer from './CardContainer';
 
 class UserEditForm extends Component {
   state = {
-    firstName: '',
-    secondName: '',
+    email: '',
+    name: '',
     age: '',
   }
 
-  onFirstNameChange = (e) => {
-    const { value } = e.target;
-    this.setState({ firstName: value });
+  componentWillReceiveProps(props) {
+    if (props.currentUserData.email !== this.props.currentUserData.email ||
+      props.currentUserData.name !== this.props.currentUserData.name ||
+      props.currentUserData.age !== this.props.currentUserData.age) {
+      this.setState({
+        name: props.currentUserData.name,
+        email: props.currentUserData.email,
+        age: props.currentUserData.age,
+      });
+    }
   }
 
-  onSecondNameChange = (e) => {
+  onEmailChange = (e) => {
     const { value } = e.target;
-    this.setState({ secondName: value });
+    this.setState({ email: value });
+  }
+
+  onNameChange = (e) => {
+    const { value } = e.target;
+    this.setState({ name: value });
   }
 
   onAgeChange = (e) => {
@@ -27,55 +39,51 @@ class UserEditForm extends Component {
     e.preventDefault();
     this.form.reset();
 
-    const data = {
-      address: this.props.currentUserAddress,
-      firstName: this.state.firstName,
-      secondName: this.state.secondName,
+    this.props.onFormSubmit({
+      email: this.state.email,
+      name: this.state.name,
       age: this.state.age,
-    };
-
-    this.props.onFormSubmit(data);
+    });
   }
+
 
   render() {
     return (
       <CardContainer>
         <form ref={(node) => { this.form = node; }} onSubmit={this.onFormSubmit}>
+          <h5>Enter your credentials to store in our registry</h5>
           <div className="form-group">
-            <label htmlFor="first_name">Enter your first name</label>
             <input
               type="text"
               className="form-control"
               id="first_name"
-              placeholder="Alexander"
-              onChange={this.onFirstNameChange}
-              required
+              placeholder="Your Email"
+              value={this.state.email}
+              onChange={this.onEmailChange}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="second_name">Enter your second name</label>
             <input
               type="text"
               className="form-control"
               id="second_name"
-              placeholder="Pistoletov"
-              onChange={this.onSecondNameChange}
-              required
+              placeholder="Your Name"
+              value={this.state.name}
+              onChange={this.onNameChange}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="age">Enter your age</label>
             <input
               type="number"
               className="form-control"
               id="age"
-              placeholder="42"
+              placeholder="Your age"
               min="0"
               max="100"
+              value={this.state.age}
               onChange={this.onAgeChange}
-              required
             />
           </div>
 
