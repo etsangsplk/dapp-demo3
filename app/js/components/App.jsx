@@ -4,6 +4,7 @@ import async from 'async';
 import UsersList from './UsersList';
 import UserEditForm from './UserEditForm';
 import getWeb3 from '../utils/getWeb3';
+import { getTransactionReceiptMined } from '../utils/helper';
 import ProfileContract from '../../../build/contracts/Profile.json';
 
 class App extends Component {
@@ -37,13 +38,15 @@ class App extends Component {
 
   onFormSubmit = (data) => {
     this.setUserCredentials(data.email, data.name, data.age)
-      .then(() => {
-        console.log('new list updated');
-        this.updateUserCount();
-        this.loadUsersList();
+      .then((result) => {
+        console.log('new list updated', result);
+
+        getTransactionReceiptMined(result.tx)
+          .then(() => {
+            this.updateUserCount();
+            this.loadUsersList();
+          });
       });
-    // TODO: update user in blockchain
-    // TODO: on transaction success update state
   }
 
   initContract = () => {
